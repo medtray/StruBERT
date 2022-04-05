@@ -72,7 +72,7 @@ python main.py \
 ## Content-based table retrieval experiments
 
 
-## Table Similarity experiments
+## Keyword-based table retrieval experiments
 
 
 
