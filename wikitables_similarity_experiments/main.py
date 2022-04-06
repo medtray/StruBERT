@@ -36,10 +36,8 @@ from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description='Wikitables similarity', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--device', type=int, default=3)
-parser.add_argument("--table_folder", type=str, default='/home/mohamedt/tables_redi2_1')
-#parser.add_argument("--table_folder", type=str, default='/home/mohamed/PycharmProjects/Data-Search-Project/tables_redi2_1')
-parser.add_argument("--tabert_path", type=str, default='/home/mohamedt/tabert_base_k3/model.bin')
-#parser.add_argument("--tabert_path", type=str, default='/home/mohamed/PycharmProjects/tabert_base_k3/model.bin')
+parser.add_argument("--table_folder", type=str, default='/path/to/wikitables/folder')
+parser.add_argument("--tabert_path", type=str, default='/path/to/tabert/model.bin')
 parser.add_argument('--batch_size', type=int, default=2)
 parser.add_argument('--epochs', type=int, default=5)
 parser.add_argument("--lr", type=float, default=0.00002)
