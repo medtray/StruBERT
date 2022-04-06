@@ -243,9 +243,8 @@ class BertPooler(nn.Module):
 
 
 class strubert(nn.Module):
-    """Class that classifies question pair as duplicate or not."""
 
-    def __init__(self, tabert_path='/home/mohamedt/tabert_base_k3/model.bin',device='cuda:1'):
+    def __init__(self, tabert_path='/path/to/tabert/model.bin',device='cuda:0'):
         """"Constructor of the class."""
         super(strubert, self).__init__()
 
