@@ -31,7 +31,7 @@ download TaBERT_Base_(K=3) from [the TaBERT Google Drive shared folder](https://
 
 ## Table Similarity experiments
 
-This part is related to suing StruBERT for table similarity.
+This part is related to using StruBERT for table similarity.
 
 ### Data
 
