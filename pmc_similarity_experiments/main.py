@@ -35,7 +35,7 @@ from tqdm import tqdm
 
 parser = argparse.ArgumentParser(description='PMC similarity', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--device', type=int, default=1)
-parser.add_argument("--tabert_path", type=str, default='/home/mohamedt/tabert_base_k3/model.bin')
+parser.add_argument("--tabert_path", type=str, default='/path/to/tabert_base_k3/model.bin')
 parser.add_argument('--batch_size', type=int, default=2)
 parser.add_argument('--epochs', type=int, default=5)
 parser.add_argument("--lr", type=float, default=0.00002)
