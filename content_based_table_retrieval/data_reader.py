@@ -106,10 +106,7 @@ class DataAndQueryReader(Dataset):
         return self.all_tables[t], self.all_query[t], self.all_tables_meta[t], self.all_query_meta[t], self.labels[t]
 
     def __len__(self):
-        """
-            return: the total number of (center, context) word pairs.
-        """
-        ## Your codes go here
+        
         return len(self.all_tables)
 
 
