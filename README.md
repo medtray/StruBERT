@@ -47,7 +47,7 @@ To evaluate `StruBERT` on table similarity task for `WikiTables`:
 ```bash
 cd wikitables_similarity_experiments/
 python main.py \
- ---table_folder path/to/wikitables_corpus
+ --table_folder path/to/wikitables_corpus
  --tabert_path path/to/pretrained/model/checkpoint.bin
  --device 0
  --epochs 5
@@ -70,6 +70,26 @@ python main.py \
 ```
 
 ## Content-based table retrieval experiments
+
+This part is related to using StruBERT for content-based table retrieval.
+
+### Data
+
+- Query by Example Data: this dataset is composed of 50 Wikipedia tables used as input queries. The query tables are related to multiple topics, and each table has at least five rows and three columns. For the ground truth relevance scores of table pairs, each pair is evaluated using three numbers: 2 means highly relevant and it indicates that the queried table is about the same topic of the query table with additional content, 1 means relevant and it indicates that the queried table contains a content that largely overlaps with the query table, and 0 means irrelevant.
+
+### Query by Example experiment
+
+```bash
+cd content_based_table_retrieval/
+python main.py \
+ --table_folder path/to/wikitables_corpus
+ --tabert_path path/to/pretrained/model/checkpoint.bin
+ --device 0
+ --epochs 5
+ --batch_size 8
+ --lr 3e-5
+ --balance_data
+```
 
 
 ## Keyword-based table retrieval experiments
