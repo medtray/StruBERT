@@ -250,7 +250,7 @@ class TableBertModel(nn.Module):
         from table_bert.vertical.vertical_attention_table_bert import BertVerticalLayer
         row_vertical_transformer_layers = nn.ModuleList([
             BertVerticalLayer(config)
-            for _ in range(5)
+            for _ in range(3)
         ])
 
         model.row_vertical_transformer_layers=row_vertical_transformer_layers
