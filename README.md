@@ -51,7 +51,7 @@ python main.py \
  --tabert_path path/to/pretrained/model/checkpoint.bin
  --device 0
  --epochs 5
- --batch_size 8
+ --batch_size 4
  --lr 3e-5
 ```
 
@@ -65,7 +65,7 @@ python main.py \
  --tabert_path path/to/pretrained/model/checkpoint.bin
  --device 0
  --epochs 5
- --batch_size 8
+ --batch_size 4
  --lr 3e-5
 ```
 
