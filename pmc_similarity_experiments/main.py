@@ -73,13 +73,13 @@ for fold_index,(train, test) in enumerate(kfolds):
 
     train_dataset = DataAndQueryReader(pmc_data,train)
     train_dataset,val_set = train_val_dataset(train_dataset, val_split=0.2)
-    print(len(train_dataset))
-    print(len(val_set))
+    print('size of training = {}'.format(len(train_dataset)))
+    print('size of validation = {}'.format(len(val_set)))
     train_iter = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, collate_fn=pad_table_query)
     valid_iter = DataLoader(val_set, batch_size=batch_size, shuffle=False, collate_fn=pad_table_query)
 
     test_dataset = DataAndQueryReader(pmc_data,test)
-    print(len(test_dataset))
+    print('size of testing = {}'.format(len(test_dataset)))
     test_iter = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, collate_fn=pad_table_query)
 
     model = strubert(tabert_path=args.tabert_path, device=args.device).to(args.device)
@@ -118,7 +118,7 @@ for fold_index,(train, test) in enumerate(kfolds):
 
                 outputs_prob = m(outputs)
                 loss = loss_bce(outputs, labels)
-                # print(loss.item())
+                print(loss.item())
 
                 epoch_loss += loss.item()
 
