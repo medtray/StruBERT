@@ -36,9 +36,6 @@ class DataAndQueryReader(Dataset):
 
         for index in fold_indices:
 
-            if index>10:
-                break
-
             tab1=tables[0][index]
             tab2=tables[2][index]
             meta1=tables[1][index]
