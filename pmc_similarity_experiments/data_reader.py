@@ -34,20 +34,23 @@ class DataAndQueryReader(Dataset):
         metas2 = []
         labels = []
 
-        for index in fold_indices:
+        with tqdm(total=len(fold_indices)) as pbar:
+            for index in fold_indices:
 
-            tab1=tables[0][index]
-            tab2=tables[2][index]
-            meta1=tables[1][index]
-            meta2=tables[3][index]
-            table1,meta1=process_table_pmc(tab1,meta1, model, max_tokens, nlp_model)
-            table2, meta2 = process_table_pmc(tab2,meta2, model, max_tokens, nlp_model)
+                tab1=tables[0][index]
+                tab2=tables[2][index]
+                meta1=tables[1][index]
+                meta2=tables[3][index]
+                table1,meta1=process_table_pmc(tab1,meta1, model, max_tokens, nlp_model)
+                table2, meta2 = process_table_pmc(tab2,meta2, model, max_tokens, nlp_model)
 
-            tables1.append(table1)
-            tables2.append(table2)
-            metas1.append(meta1)
-            metas2.append(meta2)
-            labels.append(tables[4][index])
+                tables1.append(table1)
+                tables2.append(table2)
+                metas1.append(meta1)
+                metas2.append(meta2)
+                labels.append(tables[4][index])
+                
+                pbar.update(1)
 
         self.tables1=tables1
         self.tables2=tables2
