@@ -98,7 +98,7 @@ This part is related to using StruBERT for keyword-based table retrieval.
 
 ### Data
 
-- [`WikiTables` corpus] is used for keyword-based table retrieval.
+- `WikiTables` corpus is used for keyword-based table retrieval.
 
 ### WikiTables keyword-based table retrieval experiment
 
