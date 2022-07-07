@@ -36,20 +36,23 @@ class DataAndQueryReader(Dataset):
         metas2 = []
 
 
-        for index,row in enumerate(data):
+        with tqdm(total=len(data)) as pbar:
+            for index,row in enumerate(data):
 
-            tab1=row[0]
-            tab2=row[1]
-            label=int(row[2])
-            table1,meta1=process_table(tab1, data_folder, model, max_tokens, nlp_model)
-            table2, meta2 = process_table(tab2, data_folder, model, max_tokens, nlp_model)
+                tab1=row[0]
+                tab2=row[1]
+                label=int(row[2])
+                table1,meta1=process_table(tab1, data_folder, model, max_tokens, nlp_model)
+                table2, meta2 = process_table(tab2, data_folder, model, max_tokens, nlp_model)
 
-            tables1.append(table1)
-            tables2.append(table2)
-            metas1.append(meta1)
-            metas2.append(meta2)
-            labels.append(label)
-
+                tables1.append(table1)
+                tables2.append(table2)
+                metas1.append(meta1)
+                metas2.append(meta2)
+                labels.append(label)
+                
+                pbar.update(1)
+                    
         self.tables1=tables1
         self.tables2=tables2
         self.metas1 = metas1
