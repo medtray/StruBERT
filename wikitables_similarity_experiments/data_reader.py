@@ -38,9 +38,6 @@ class DataAndQueryReader(Dataset):
 
         for index,row in enumerate(data):
 
-            if index>10:
-                break
-
             tab1=row[0]
             tab2=row[1]
             label=int(row[2])
