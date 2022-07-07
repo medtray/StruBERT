@@ -100,11 +100,11 @@ class VerticalAttentionTableBertInputFormatter(VanillaTableBertInputFormatter):
 
         else:
 
-            #n_cols=min(5,len(table.header))
-            #n_rows=5
+            n_cols=min(5,len(table.header))
+            n_rows=5
 
-            n_cols=min(10,len(table.header))
-            n_rows=10
+            #n_cols=min(10,len(table.header))
+            #n_rows=10
 
             table_data=table.data[:n_rows]
             row_used=len(table_data)
