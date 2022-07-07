@@ -54,9 +54,6 @@ class DataAndQueryReader(Dataset):
 
         for index,line in enumerate(list_lines):
 
-            if index>10:
-               break
-
             query=line[0]
             query=id_to_queries[query]
             tab=line[2]
