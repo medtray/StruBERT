@@ -52,41 +52,44 @@ class DataAndQueryReader(Dataset):
             queries_id += [aa[0]]
             list_lines.append(aa)
 
-        for index,line in enumerate(list_lines):
+        with tqdm(total=len(list_lines)) as pbar:
+            for index,line in enumerate(list_lines):
 
-            query=line[0]
-            query=id_to_queries[query]
-            tab=line[2]
-            rel=int(line[4])
+                query=line[0]
+                query=id_to_queries[query]
+                tab=line[2]
+                rel=int(line[4])
 
-            if query in processed_tables:
-                proc_query_tab=processed_tables[query]['table']
-                proc_query_meta=processed_tables[query]['meta']
+                if query in processed_tables:
+                    proc_query_tab=processed_tables[query]['table']
+                    proc_query_meta=processed_tables[query]['meta']
 
-            else:
-                proc_query_tab,proc_query_meta=process_table(query, data_folder, model, max_tokens, nlp_model)
-                processed_tables[query]={}
-                processed_tables[query]['table']=proc_query_tab
-                processed_tables[query]['meta']=proc_query_meta
+                else:
+                    proc_query_tab,proc_query_meta=process_table(query, data_folder, model, max_tokens, nlp_model)
+                    processed_tables[query]={}
+                    processed_tables[query]['table']=proc_query_tab
+                    processed_tables[query]['meta']=proc_query_meta
 
-            if tab in processed_tables:
-                proc_tab = processed_tables[tab]['table']
-                proc_meta = processed_tables[tab]['meta']
+                if tab in processed_tables:
+                    proc_tab = processed_tables[tab]['table']
+                    proc_meta = processed_tables[tab]['meta']
 
-            else:
-                proc_tab, proc_meta = process_table(tab, data_folder, model, max_tokens, nlp_model)
-                processed_tables[tab] = {}
-                processed_tables[tab]['table'] = proc_tab
-                processed_tables[tab]['meta'] = proc_meta
+                else:
+                    proc_tab, proc_meta = process_table(tab, data_folder, model, max_tokens, nlp_model)
+                    processed_tables[tab] = {}
+                    processed_tables[tab]['table'] = proc_tab
+                    processed_tables[tab]['meta'] = proc_meta
 
 
 
-            labels.append(rel)
-            all_tables.append(proc_tab)
-            all_tables_meta.append(proc_meta)
-            all_query.append(proc_query_tab)
-            all_query_meta.append(proc_query_meta)
-            to_save.append(line)
+                labels.append(rel)
+                all_tables.append(proc_tab)
+                all_tables_meta.append(proc_meta)
+                all_query.append(proc_query_tab)
+                all_query_meta.append(proc_query_meta)
+                to_save.append(line)
+                
+                pbar.update(1)
 
 
         self.all_tables=all_tables
