@@ -33,8 +33,8 @@ from utils import pad_table_search,train_val_dataset,save_checkpoint,load_checkp
 
 parser = argparse.ArgumentParser(description='Keyword-based table retrieval', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument('--device', type=int, default=3)
-parser.add_argument("--table_folder", type=str, default='/data/mohamed/WP_tables/tables_redi2_1')
-parser.add_argument("--tabert_path", type=str, default='/data/mohamed/tabert_base_k3/model.bin')
+parser.add_argument("--table_folder", type=str, default='/path/to/wikitables/folder')
+parser.add_argument("--tabert_path", type=str, default='/path/to/tabert/model.bin')
 parser.add_argument('--batch_size', type=int, default=4)
 parser.add_argument('--epochs', type=int, default=3)
 parser.add_argument("--lr", type=float, default=3e-5)
@@ -84,9 +84,6 @@ all_folds_map = []
 all_folds_mrr = []
 
 for fold_index,(train, test) in enumerate(kfolds):
-
-    #if fold_index!=1:
-    #    continue
 
     print('>>>> fold {}'.format(str(fold_index + 1)))
     loss_train = []
@@ -183,11 +180,9 @@ for fold_index,(train, test) in enumerate(kfolds):
             for i, batch in enumerate(valid_iter):
                 tables, queries, labels = batch
                 labels = torch.FloatTensor(labels).to(args.device)
-                #labels =labels/2
 
                 outputs = model(tables, queries)
-                #outputs = m(outputs)
-
+                
                 loss = loss_function(outputs, labels)
                 validation_loss += loss.item()
                 all_labels_valid += labels.tolist()
@@ -217,11 +212,9 @@ for fold_index,(train, test) in enumerate(kfolds):
         for i, batch in enumerate(test_iter):
             tables, queries, labels = batch
             labels = torch.FloatTensor(labels).to(args.device)
-            #labels = labels/2
 
             outputs = model(tables, queries)
-            #outputs =m(outputs)
-
+            
             loss = loss_function(outputs, labels)
             testing_loss += loss.item()
 
