@@ -110,7 +110,7 @@ python main.py \
  --table_folder path/to/wikitables_corpus
  --tabert_path path/to/pretrained/model/checkpoint.bin
  --device 0
- --epochs 5
+ --epochs 3
  --batch_size 4
  --lr 3e-5
 ```
