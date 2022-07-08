@@ -86,7 +86,7 @@ python main.py \
  --tabert_path path/to/pretrained/model/checkpoint.bin
  --device 0
  --epochs 5
- --batch_size 8
+ --batch_size 4
  --lr 3e-5
  --balance_data
 ```
@@ -101,6 +101,17 @@ This part is related to using StruBERT for keyword-based table retrieval.
 - `WikiTables` corpus is used for keyword-based table retrieval.
 
 ### WikiTables keyword-based table retrieval experiment
+
+```bash
+cd keyword_based_table_retrieval/
+python main.py \
+ --table_folder path/to/wikitables_corpus
+ --tabert_path path/to/pretrained/model/checkpoint.bin
+ --device 0
+ --epochs 5
+ --batch_size 4
+ --lr 3e-5
+```
 
 ## Reference
 
