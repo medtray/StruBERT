@@ -349,3 +349,95 @@ class strubert(nn.Module):
         outputs = self.dense_f(final_feat).squeeze(1)
 
         return outputs
+    
+class strubert_keyword(nn.Module):
+    """Class that classifies question pair as duplicate or not."""
+
+    def __init__(self, tabert_path='/path/to/tabert/model.bin', device='cuda:0'):
+        """"Constructor of the class."""
+        super(strubert_keyword, self).__init__()
+
+        self.embedding = VerticalAttentionTableBert.from_pretrained(
+            tabert_path,
+        ).to(device)
+
+        config2=self.embedding.config
+        config2.num_hidden_layers=1
+        config2.num_attention_heads=4
+        config2.max_position_embeddings=50
+
+
+        self.dense_f = nn.Linear(3072, 1, True).to(device)
+
+        self.ranking_embedding = BertEmbeddings(config2).to(device)
+        self.cls_c=torch.nn.Parameter(torch.randn(1,768),requires_grad=True).to(device)
+        self.cls_r=torch.nn.Parameter(torch.randn(1,768),requires_grad=True).to(device)
+        self.sep = torch.nn.Parameter(torch.randn(1, 768), requires_grad=True).to(device)
+
+        self.encoder = BertEncoder(config2).to(device)
+        self.pooler = BertPooler(config2).to(device)
+
+        self.device = device
+
+
+
+
+    def forward(self,batch_input,batch_queries):
+
+        context_encoding, column_encoding, _, context_encoding_row, row_encoding, _ = self.embedding.encode(
+            contexts=batch_queries,
+            tables=batch_input
+        )
+
+        output_all_encoded_layers=False
+
+        column_guided_cls = context_encoding[:, 0]
+        row_guided_cls=context_encoding_row[:, 0]
+
+        batch_size=row_encoding.shape[0]
+        num_rows1 = row_encoding.shape[1]
+        num_cols1 = column_encoding.shape[1]
+
+        cls_to_add=torch.stack([self.cls_c]*batch_size)
+        cls_r_to_add=torch.stack([self.cls_r]*batch_size)
+        sep_to_add = torch.stack([self.sep] * batch_size)
+
+        seqa=torch.zeros([batch_size,num_cols1+2],dtype=torch.long).to(self.device)
+        col_seq=torch.cat([cls_to_add,column_encoding,sep_to_add],dim=1)
+        col_types=seqa
+        col_emb=self.ranking_embedding(col_seq,col_types)
+        attention_mask = torch.ones_like(col_types)
+        extended_attention_mask = attention_mask.unsqueeze(1).unsqueeze(2)
+        extended_attention_mask = extended_attention_mask.to(dtype=next(self.parameters()).dtype)  # fp16 compatibility
+        extended_attention_mask = (1.0 - extended_attention_mask) * -10000.0
+        encoded_layers,all_attention_weights_col = self.encoder(col_emb,
+                                      extended_attention_mask,
+                                      output_all_encoded_layers=output_all_encoded_layers)
+        sequence_output = encoded_layers[-1]
+        pooled_output_col = self.pooler(sequence_output)
+
+        seqa = torch.zeros([batch_size, num_rows1 + 2], dtype=torch.long)
+        seqa=seqa.to(self.device)
+        row_seq = torch.cat([cls_r_to_add, row_encoding, sep_to_add], dim=1)
+        row_types = seqa
+
+        row_emb = self.ranking_embedding(row_seq, row_types)
+        attention_mask = torch.ones_like(row_types)
+        extended_attention_mask = attention_mask.unsqueeze(1).unsqueeze(2)
+        extended_attention_mask = extended_attention_mask.to(dtype=next(self.parameters()).dtype)  # fp16 compatibility
+        extended_attention_mask = (1.0 - extended_attention_mask) * -10000.0
+        encoded_layers,all_attention_weights_row = self.encoder(row_emb,
+                                      extended_attention_mask,
+                                      output_all_encoded_layers=output_all_encoded_layers)
+        sequence_output = encoded_layers[-1]
+        pooled_output_row = self.pooler(sequence_output)
+
+        log_pooling_sum=torch.cat([pooled_output_col,pooled_output_row,column_guided_cls,row_guided_cls],dim=1)
+
+
+
+        outputs=self.dense_f(log_pooling_sum).squeeze(1)
+
+
+        return outputs
+
