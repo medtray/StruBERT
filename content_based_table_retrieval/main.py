@@ -31,7 +31,7 @@ parser = argparse.ArgumentParser(description='Content-based table retrieval', fo
 parser.add_argument('--device', type=int, default=3)
 parser.add_argument("--table_folder", type=str, default='/path/to/wikitables/folder')
 parser.add_argument("--tabert_path", type=str, default='/path/to/tabert/model.bin')
-parser.add_argument('--batch_size', type=int, default=1)
+parser.add_argument('--batch_size', type=int, default=4)
 parser.add_argument('--epochs', type=int, default=1)
 parser.add_argument("--lr", type=float, default=0.00002)
 parser.add_argument("--balance_data", dest="balance", action="store_true")
@@ -172,23 +172,28 @@ for fold_index,(train, test) in enumerate(kfolds):
         all_outputs = []
         all_labels = []
 
-        for i, batch in enumerate(train_iter):
-            tables, queries, all_tables_meta, all_query_meta, labels = batch
-            labels = torch.FloatTensor(labels).to(args.device)
+        with tqdm(total=num_batches) as pbar:
+            for i, batch in enumerate(train_iter):
+                tables, queries, all_tables_meta, all_query_meta, labels = batch
+                labels = torch.FloatTensor(labels).to(args.device)
 
-            outputs = model(tables, all_tables_meta, queries, all_query_meta)  # .to(args.device)
+                outputs = model(tables, all_tables_meta, queries, all_query_meta)  # .to(args.device)
 
-            loss = loss_function(outputs, labels)
+                loss = loss_function(outputs, labels)
 
-            epoch_loss += loss.item()
+                print(loss.item())
 
-            all_outputs += outputs.tolist()
-            all_labels += labels.tolist()
+                epoch_loss += loss.item()
 
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            scheduler.step()
+                all_outputs += outputs.tolist()
+                all_labels += labels.tolist()
+
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+                scheduler.step()
+                
+                pbar.update(1)
 
 
         losslogger = epoch_loss / num_batches
