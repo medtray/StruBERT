@@ -105,6 +105,7 @@ This part is related to using StruBERT for keyword-based table retrieval.
 
 ```bash
 cd keyword_based_table_retrieval/
+chmod +x trec_eval
 python main.py \
  --table_folder path/to/wikitables_corpus
  --tabert_path path/to/pretrained/model/checkpoint.bin
